@@ -1,9 +1,16 @@
 import { gql } from 'apollo-server-express';
 
 export const typeDefs = 
-gql`type Item{
+gql`
+input ItemInput {
+  title: String
+  desc: String
+}
+type Item{
     title:String,
-    desc:String
+    desc:String,
+    testNo:Int
+    id:ID
    }
    type Error{
    message:String
@@ -18,7 +25,9 @@ gql`type Item{
      },
 
      type Mutation{
-      addItem(title:String,desc:String):ItemResponse
+      addItem(input:ItemInput):ItemResponse
+      updateItem(input:ItemInput,id:ID):ItemResponse
+      deleteItem(id:ID):Boolean
      }
 
 

@@ -4,6 +4,8 @@ import { ApolloServer } from 'apollo-server-express';
 import mongoose  from 'mongoose';
 import { resolvers } from './resolvers/TestResolver';
 import { typeDefs } from './typeDefs/typedefs';
+import autoIncrement from 'mongoose-auto-increment'
+
 
 const PORT=4000;
 
@@ -30,11 +32,24 @@ credentials: true,
   }
 }
 app.use(cors(corsOptions))
-var uri = "mongodb://localhost:27017/testmongo";
+const uri = "mongodb://localhost:27017/testmongo";
 
 //@ts-ignore
 mongoose.connect(uri, { useUnifiedTopology: true, useNewUrlParser: true })
 .then(()=>console.log("connected to newmango db"))
+
+// Drop the 'foo' collection from the current database
+// mongoose.connection.db.dropCollection('apollo', function(err, result) {});
+
+//   mongoose.connect(uri,function(){
+//     /* Drop the DB */
+//     mongoose.connection.db.dropDatabase();
+// });
+
+const connection = mongoose.createConnection(uri);
+autoIncrement.initialize(connection);
+
+
 
 //rest routes
 app.get("/", (req, res) => {

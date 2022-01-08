@@ -2,9 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.typeDefs = void 0;
 const apollo_server_express_1 = require("apollo-server-express");
-exports.typeDefs = (0, apollo_server_express_1.gql) `type Item{
+exports.typeDefs = (0, apollo_server_express_1.gql) `
+input ItemInput {
+  title: String
+  desc: String
+}
+type Item{
     title:String,
-    desc:String
+    desc:String,
+    testNo:Int
+    id:ID
    }
    type Error{
    message:String
@@ -19,7 +26,9 @@ exports.typeDefs = (0, apollo_server_express_1.gql) `type Item{
      },
 
      type Mutation{
-      addItem(title:String,desc:String):ItemResponse
+      addItem(input:ItemInput):ItemResponse
+      updateItem(input:ItemInput,id:ID):ItemResponse
+      deleteItem(id:ID):Boolean
      }
 
 

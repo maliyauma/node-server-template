@@ -12,13 +12,13 @@ exports.resolvers = {
         },
     },
     Mutation: {
-        addItem: async (parent, { title, desc }, context, info) => {
+        addItem: async (parent, { input }, context, info) => {
             let item = {};
             let error = {};
             try {
                 const newItem = await new TestModel_1.TestModel({
-                    title,
-                    desc,
+                    title: input.title,
+                    desc: input.desc,
                 });
                 item = await newItem.save();
                 console.log("item  ==== ", item);
@@ -30,9 +30,33 @@ exports.resolvers = {
             return {
                 item: item,
                 error: {
-                    message: error.message
-                }
+                    message: error.message,
+                },
             };
+        },
+        updateItem: async (parent, { input, id }, context, info) => {
+            let error = {};
+            const updatedChat = await TestModel_1.TestModel.findByIdAndUpdate({ _id: id }, { title: input.title, desc: input.desc }, { new: true })
+                .catch(e => {
+                console.log("is delete error ======", e);
+                error = e;
+            });
+            return {
+                item: updatedChat,
+                error: {
+                    message: error.message,
+                },
+            };
+        },
+        deleteItem: async (parent, { input, id }, context, info) => {
+            let error = {};
+            const updatedChat = await TestModel_1.TestModel.findByIdAndDelete({ _id: id })
+                .catch(e => {
+                console.log("is delete error ======", e);
+                error = e;
+                return false;
+            });
+            return true;
         },
     },
 };

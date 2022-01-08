@@ -9,6 +9,7 @@ const apollo_server_express_1 = require("apollo-server-express");
 const mongoose_1 = __importDefault(require("mongoose"));
 const TestResolver_1 = require("./resolvers/TestResolver");
 const typedefs_1 = require("./typeDefs/typedefs");
+const mongoose_auto_increment_1 = __importDefault(require("mongoose-auto-increment"));
 const PORT = 4000;
 const startServer = async () => {
     const app = (0, express_1.default)();
@@ -31,9 +32,11 @@ const startServer = async () => {
         }
     };
     app.use((0, cors_1.default)(corsOptions));
-    var uri = "mongodb://localhost:27017/testmongo";
+    const uri = "mongodb://localhost:27017/testmongo";
     mongoose_1.default.connect(uri, { useUnifiedTopology: true, useNewUrlParser: true })
         .then(() => console.log("connected to newmango db"));
+    const connection = mongoose_1.default.createConnection(uri);
+    mongoose_auto_increment_1.default.initialize(connection);
     app.get("/", (req, res) => {
         res.json({
             data: "API is working...",
