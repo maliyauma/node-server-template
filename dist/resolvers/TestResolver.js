@@ -10,6 +10,23 @@ exports.resolvers = {
             console.log("holt output ======", chats);
             return chats;
         },
+        getPagItem: async (parent, { page, limit }, context, info) => {
+            const myAggregate = TestModel_1.TestModel.aggregate();
+            const options = {
+                page: page,
+                limit: limit,
+            };
+            let chats = [];
+            await TestModel_1.TestModel.aggregatePaginate(myAggregate, options)
+                .then((results) => {
+                console.log("agregaed resultsresults ======== ", results);
+                chats = results.docs;
+            })
+                .catch(function (err) {
+                console.log("agregaed resultsresults ======== ", err);
+            });
+            return chats;
+        }
     },
     Mutation: {
         addItem: async (parent, { input }, context, info) => {

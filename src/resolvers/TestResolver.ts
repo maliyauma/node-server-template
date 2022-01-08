@@ -7,6 +7,25 @@ export const resolvers = {
       console.log("holt output ======", chats);
       return chats;
     },
+       //@ts-ignore
+    getPagItem: async(parent, {page,limit}, context, info)=>{
+      const myAggregate = TestModel.aggregate();
+      const options = {
+        page: page,
+        limit: limit,
+      };
+      let chats=[]
+       //@ts-ignore
+      await TestModel.aggregatePaginate(myAggregate, options)
+      .then((results)=>{
+        console.log("agregaed resultsresults ======== ",results);
+        chats=results.docs
+      })
+      .catch(function (err) {
+        console.log("agregaed resultsresults ======== ",err);
+      });
+      return chats;
+    }
   },
   Mutation: {
     //shape of params (parent,args, context, info)

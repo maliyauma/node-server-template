@@ -11,7 +11,7 @@ type Item{
     title:String,
     desc:String,
     testNo:Int
-    id:ID
+    _id:ID
    }
    type Error{
    message:String
@@ -23,12 +23,14 @@ type Item{
     type Query {
       defaultPost:String,
       getItems:[Item]
+      getPagItem(page:Int,limit:Int):[Item]
      },
 
      type Mutation{
       addItem(input:ItemInput):ItemResponse
       updateItem(input:ItemInput,id:ID):ItemResponse
       deleteItem(id:ID):Boolean
+
      }
 
 
