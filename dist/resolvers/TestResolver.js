@@ -9,23 +9,31 @@ exports.resolvers = {
             const chats = await TestModel_1.TestModel.find({});
             console.log("holt output ======", chats);
             return chats;
-        }
+        },
     },
     Mutation: {
         addItem: async (parent, { title, desc }, context, info) => {
-            const newItem = await new TestModel_1.TestModel({
-                title,
-                desc
-            });
-            await newItem.save()
-                .then(e => {
-                console.log("addTest response =====", e);
-            })
-                .catch(e => {
-                console.log("addTest error response =====", e);
-            });
-            return newItem;
-        }
-    }
+            let item = {};
+            let error = {};
+            try {
+                const newItem = await new TestModel_1.TestModel({
+                    title,
+                    desc,
+                });
+                item = await newItem.save();
+                console.log("item  ==== ", item);
+            }
+            catch (e) {
+                console.log("addTest error response =====", e.message);
+                error = e;
+            }
+            return {
+                item: item,
+                error: {
+                    message: error.message
+                }
+            };
+        },
+    },
 };
 //# sourceMappingURL=TestResolver.js.map
