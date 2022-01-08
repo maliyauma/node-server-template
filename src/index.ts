@@ -1,22 +1,11 @@
-// const {express}=require('express');
 import  express  from "express";
 import cors from 'cors'
 import { ApolloServer } from 'apollo-server-express';
-import { gql } from 'apollo-server-express';
+import mongoose  from 'mongoose';
+import { resolvers } from './resolvers/TestResolver';
+import { typeDefs } from './typeDefs/typedefs';
 
 const PORT=4000;
-
-const typeDefs = 
-gql`
-    type Query {
-      defaultPost:String
-     }
-`;
-const resolvers = {
-  Query: {
-    defaultPost: () => "eat your vegetables",
-  },
-};
 
 const startServer=async()=>
 {
@@ -41,12 +30,19 @@ credentials: true,
   }
 }
 app.use(cors(corsOptions))
+var uri = "mongodb://localhost:27017/testmongo";
+
+//@ts-ignore
+mongoose.connect(uri, { useUnifiedTopology: true, useNewUrlParser: true })
+.then(()=>console.log("connected to newmango db"))
+
 //rest routes
 app.get("/", (req, res) => {
 res.json({
     data: "API is working...",
   });
 });
+
 
 const server = new ApolloServer({
   typeDefs,
