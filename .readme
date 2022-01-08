@@ -1,0 +1,4 @@
+step by step guide to set up a graphql/rest nodejs server with typescript 
+
+commit 1: basic starter code with a basic graphql server and a node route,
+           cors and typescript also set up  
