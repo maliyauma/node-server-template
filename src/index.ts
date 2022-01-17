@@ -39,7 +39,7 @@ mongoose.connect(uri, { useUnifiedTopology: true, useNewUrlParser: true })
 .then(()=>console.log("connected to newmango db"))
 
 // Drop the 'foo' collection from the current database
-// mongoose.connection.db.dropCollection('apollo', function(err, result) {});
+// // mongoose.connection.db.dropCollection('apollo', function(err, result) {});
 
 //   mongoose.connect(uri,function(){
 //     /* Drop the DB */
@@ -72,3 +72,5 @@ app.listen(PORT, () => {
 });
 }
 startServer().catch(e=>console.log("error strting server======== ",e))
+
+

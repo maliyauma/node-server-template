@@ -32,3 +32,16 @@ TestSchema.plugin(autoIncrement.plugin, { model: 'Test', field: 'testNo' });
 TestSchema.plugin(aggregatePaginate);
 
 export const TestModel= mongoose.model("Test", TestSchema);
+
+
+
+export const dummy_persons=[
+  {id:1,name:"monday",age:20,gender:"Male"},
+  {id:2,name:"tuesday",age:21,gender:"Male"},
+  {id:3,name:"Wednesday",age:22,gender:"Male"},
+  {id:4,name:"Thursday",age:23,gender:"Male"},
+ {id:5,name:"Friday",age:24,gender:"Male"},
+ {id:6,name:"Saturday",age:25,gender:"Male"},
+ {id:7,name:"Sunday",age:26,gender:"Male"},
+ 
+]

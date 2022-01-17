@@ -1,32 +1,110 @@
-import { TestModel } from "./../model/TestModel";
+import { dummy_persons, TestModel } from "./../model/TestModel";
+
 export const resolvers = {
   Query: {
-    defaultPost: () => "eat your vegetables",
-    getItems: async () => {
+    person:async(parent, {limit=3,page=0}, context, info)=>{
+    //@ts-ignore
+     const alist=dummy_persons.slice(page,limit)
+     console.log("fetch page is ===== ",alist)
+     const listy={
+      clients:alist,
+      clerk:"bozyo",
+      rank:"grinder",
+      limit:3,
+      page:page
+    }
+    return listy
+    },
+    hello: () => {
+     return{name:"daddy",status:"eat your vegetables"}
+    },
+    items: async () => {
       const chats = await TestModel.find({});
-      console.log("holt output ======", chats);
+      console.log("+++++++++++query executed+++++++++++++");
       return chats;
     },
        //@ts-ignore
     getPagItem: async(parent, {page,limit}, context, info)=>{
+      console.log(" the args are page/limit:",page, limit)
       const myAggregate = TestModel.aggregate();
       const options = {
         page: page,
         limit: limit,
       };
-      let chats=[]
+      let items=[]
+      let pagopt={}
        //@ts-ignore
       await TestModel.aggregatePaginate(myAggregate, options)
       .then((results)=>{
-        console.log("agregaed resultsresults ======== ",results);
-        chats=results.docs
+        console.log("results in then ======== ",results);
+        const{
+          docs,
+          totalDocs,
+          limit,
+          page,
+          totalPages,
+          pagingCounter,
+          hasPrevPage,
+          hasNextPage,
+          prevPage,
+          nextPage
+        }=results
+
+      
+        items=docs
+        
+        pagopt={
+          totalDocs,
+          limit,
+          page,
+          totalPages,
+          pagingCounter,
+          hasPrevPage,
+          hasNextPage,
+          prevPage,
+          nextPage
+        }
       })
       .catch(function (err) {
         console.log("agregaed resultsresults ======== ",err);
       });
-      return chats;
-    }
-  },
+      // console.log("returning items ========  ",items)
+      return {
+        items,
+        pagopt
+     };
+    },
+    getPagItems2: async(parent, {page,limit}, context, info)=>{
+      console.log("skipping to page ========= ",page,"   limit to    ======",limit)
+      const myAggregate = TestModel.aggregate();
+      const options = {
+        page: page,
+        limit: limit,
+      };
+      let items=[]
+    
+       //@ts-ignore
+      await TestModel.aggregatePaginate(myAggregate, options)
+      .then((results)=>{
+        console.log("agregaed resultsresults ======== ",results);
+        const{
+          docs,
+         }=results
+                
+      
+        
+        items=docs
+        
+
+      })
+      .catch(function (err) {
+        console.log("agregaed resultsresults ======== ",err);
+      });
+      console.log("destrucured docs ========  ",items)
+      return items;
+    },
+
+ },
   Mutation: {
     //shape of params (parent,args, context, info)
     addItem: async (parent, { input}, context, info) => {
