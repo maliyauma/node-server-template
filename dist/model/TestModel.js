@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.dummy_persons = exports.TestModel = void 0;
+exports.PersonModel = exports.dummy_persons = exports.TestModel = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const mongoose_auto_increment_1 = __importDefault(require("mongoose-auto-increment"));
 const mongoose_aggregate_paginate_v2_1 = __importDefault(require("mongoose-aggregate-paginate-v2"));
@@ -37,4 +37,21 @@ exports.dummy_persons = [
     { id: 6, name: "Saturday", age: 25, gender: "Male" },
     { id: 7, name: "Sunday", age: 26, gender: "Male" },
 ];
+const PersonSchema = new Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    desc: {
+        type: String,
+        required: true
+    },
+    testNo: {
+        type: Number,
+        required: true
+    },
+}, { timestamps: true });
+PersonSchema.plugin(mongoose_auto_increment_1.default.plugin, { model: 'Test', field: 'testNo' });
+PersonSchema.plugin(mongoose_aggregate_paginate_v2_1.default);
+exports.PersonModel = mongoose_1.default.model("Person", PersonSchema);
 //# sourceMappingURL=TestModel.js.map
