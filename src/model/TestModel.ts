@@ -26,7 +26,7 @@ const TestSchema = new Schema({
 //add this for auto createdAt and updatedat fields
 {timestamps:true}
 );
-TestSchema.plugin(autoIncrement.plugin, { model: 'Test', field: 'testNo' });
+// TestSchema.plugin(autoIncrement.plugin, { model: 'Test', field: 'testNo' });
 TestSchema.plugin(aggregatePaginate);
 
 export const TestModel= mongoose.model("Test", TestSchema);
@@ -46,23 +46,25 @@ export const dummy_persons=[
 
 
 const PersonSchema = new Schema({
-  title: {
-    type: String,
-    required: true
+  id: {
+    type:String,
+    auto:true
   },
-  desc: {
-    type: String,
-    required: true
-  },
-  testNo:{
+  name: {
+    type: String 
+   },
+  age:{
     type: Number,
-    required: true
-  },
+   },
+   gender:{
+    type: String 
+   },
+
   },
 //add this for auto createdAt and updatedat fields
 {timestamps:true}
 );
-PersonSchema.plugin(autoIncrement.plugin, { model: 'Test', field: 'testNo' });
+// TestSchema.plugin(autoIncrement.plugin, { model: 'Person', field: 'testNo' });
 PersonSchema.plugin(aggregatePaginate);
 
 export const PersonModel= mongoose.model("Person", PersonSchema);

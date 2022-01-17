@@ -5,10 +5,23 @@ const TestModel_1 = require("./../model/TestModel");
 exports.resolvers = {
     Query: {
         person: async (parent, { limit = 3, page = 0 }, context, info) => {
-            const alist = TestModel_1.dummy_persons.slice(page, limit);
+            const person = await TestModel_1.PersonModel.find({});
+            console.log("person returned is ======= ", person);
+            const alist = person.slice(page, limit);
             console.log("fetch page is ===== ", alist);
+            const fiexdarr = [];
+            alist === null || alist === void 0 ? void 0 : alist.map((item) => {
+                const newobj = {
+                    id: item._id,
+                    name: item.name,
+                    age: item.age,
+                    gender: item.gender
+                };
+                fiexdarr.push(newobj);
+            });
+            console.log("+++++++++++query executed+++++++++++++", fiexdarr);
             const listy = {
-                clients: alist,
+                clients: fiexdarr,
                 clerk: "bozyo",
                 rank: "grinder",
                 limit: 3,
@@ -80,6 +93,22 @@ exports.resolvers = {
         },
     },
     Mutation: {
+        addPerson: async (parent, { input }, context, info) => {
+            let item = {};
+            try {
+                const newItem = await new TestModel_1.PersonModel({
+                    name: input.name,
+                    age: input.age,
+                    gender: input.gender,
+                });
+                item = await newItem.save();
+                console.log("item  ==== ", item);
+            }
+            catch (e) {
+                console.log("addTest error response =====", e.message);
+            }
+            return item;
+        },
         addItem: async (parent, { input }, context, info) => {
             let item = {};
             let error = {};

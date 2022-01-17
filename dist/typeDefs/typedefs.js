@@ -7,6 +7,12 @@ input ItemInput {
   title: String
   desc: String
 }
+input PersonInput{
+  name:String,
+  age:Int,
+  gender:String,
+
+}
 type Hello{
   name:String,
   status:String
@@ -20,7 +26,8 @@ type Person{
   id:String
   name:String,
   age:Int,
-  gender:String
+  gender:String,
+
 }
 type Item{
     title:String,
@@ -64,6 +71,7 @@ type Item{
       addItem(input:ItemInput):ItemResponse
       updateItem(input:ItemInput,id:ID):ItemResponse
       deleteItem(id:ID):Boolean
+      addPerson(input:PersonInput):Person
 
      }
 
