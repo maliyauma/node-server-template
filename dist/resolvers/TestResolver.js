@@ -5,27 +5,38 @@ const TestModel_1 = require("./../model/TestModel");
 exports.resolvers = {
     Query: {
         person: async (parent, { limit = 3, page = 0 }, context, info) => {
-            const person = await TestModel_1.PersonModel.find({});
-            console.log("person returned is ======= ", person);
-            const alist = person.slice(page, limit);
-            console.log("fetch page is ===== ", alist);
+            const myAggregate = TestModel_1.PersonModel.aggregate();
+            const options = {
+                page: page,
+                limit: limit,
+            };
+            let persons = [];
+            let pagopt = {};
+            await TestModel_1.PersonModel.aggregatePaginate(myAggregate, options)
+                .then((results) => {
+                const { docs, totalDocs, limit, page, totalPages, pagingCounter, hasPrevPage, hasNextPage, prevPage, nextPage } = results;
+                persons = docs;
+                pagopt = { totalDocs, limit, page, totalPages, pagingCounter,
+                    hasPrevPage, hasNextPage, prevPage, nextPage
+                };
+            })
+                .catch(function (err) {
+                console.log("agregaed resultsresults ======== ", err);
+            });
             const fiexdarr = [];
-            alist === null || alist === void 0 ? void 0 : alist.map((item) => {
+            persons === null || persons === void 0 ? void 0 : persons.map((item) => {
                 const newobj = {
-                    id: item._id,
-                    name: item.name,
-                    age: item.age,
-                    gender: item.gender
+                    id: item._id, name: item.name, age: item.age, gender: item.gender
                 };
                 fiexdarr.push(newobj);
             });
-            console.log("+++++++++++query executed+++++++++++++", fiexdarr);
+            console.log("+++++++++++query page ===  ", page, "fixedarray+++++++++++++", fiexdarr);
             const listy = {
                 clients: fiexdarr,
                 clerk: "bozyo",
                 rank: "grinder",
                 limit: 3,
-                page: page
+                page: pagopt.page
             };
             return listy;
         },

@@ -4,28 +4,47 @@ export const resolvers = {
   Query: {
     person:async(parent, {limit=3,page=0}, context, info)=>{
     //@ts-ignore
-    const person= await PersonModel.find({});
-    console.log("person returned is ======= ",person)
-     const alist=person.slice(page,limit)
-     console.log("fetch page is ===== ",alist)
-const fiexdarr=[]
-    alist?.map((item)=>{
+    const myAggregate = PersonModel.aggregate();
+    const options = {
+      page: page,
+      limit: limit,
+    };
+    let persons=[]
+    let pagopt={}
+     //@ts-ignore
+    await PersonModel.aggregatePaginate(myAggregate, options)
+    .then((results)=>{
+      // console.log("results in then ======== ",results);
+      const{ docs, totalDocs, limit,  page, totalPages ,pagingCounter,
+        hasPrevPage, hasNextPage, prevPage,  nextPage}=results
+     persons=docs
+      
+      pagopt={  totalDocs,limit,page,totalPages,pagingCounter,
+        hasPrevPage,hasNextPage,prevPage,nextPage
+      }
+    })
+    .catch(function (err) {
+      console.log("agregaed resultsresults ======== ",err);
+    });
+    // console.log("person returned is ======= ",persons)
+
+  const fiexdarr=[]
+    persons?.map((item)=>{
        const newobj={
-         id:item._id,
-         name:item.name,
-         age:item.age,
-         gender:item.gender
+         //@ts-ignore 
+         id:item._id,name:item.name,age:item.age,gender:item.gender
        }
     //@ts-ignore 
      fiexdarr.push(newobj)
      })
-     console.log("+++++++++++query executed+++++++++++++",fiexdarr);
+     console.log("+++++++++++query page ===  ",page,"fixedarray+++++++++++++",fiexdarr);
      const listy={
       clients:fiexdarr,
       clerk:"bozyo",
       rank:"grinder",
       limit:3,
-      page:page
+       //@ts-ignore 
+      page:pagopt.page
     }
     return listy
     },
